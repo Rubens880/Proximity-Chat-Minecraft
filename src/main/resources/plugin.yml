@@ -1,0 +1,12 @@
+name: ProximityChat
+version: '${project.version}'
+main: com.ruben.proximitychat.Main
+api-version: 1.16
+authors: [ PaniniHamKaas ]
+description: Use proximity chat in your server.
+commands:
+  global:
+    description: Sends a global message.
+  getmegaphone:
+    description: Gives megaphone to speak with more range.
+
