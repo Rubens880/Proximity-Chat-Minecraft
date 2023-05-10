@@ -6,9 +6,12 @@ import com.ruben.proximitychat.Listeners.ChatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -27,11 +30,16 @@ public final class Main extends JavaPlugin {
      */
 
     private YamlConfiguration config;
+    private NamespacedKey key;
 
     @Override
     public void onEnable() {
         //configFile
         createConfig();
+
+        //NamespacedKey
+        key = new NamespacedKey(this, "chatRangeItem");
+
 
         //Commands
         getCommand("global").setExecutor(new GlobalCommand());
@@ -73,9 +81,12 @@ public final class Main extends JavaPlugin {
         ItemMeta megaphoneMeta = megaphone.getItemMeta();
         megaphoneMeta.setDisplayName("Megaphone");
         megaphoneMeta.setLore(List.of(ChatColor.DARK_RED + "Megaphone to say things louder!"));
+        PersistentDataContainer pdc = megaphoneMeta.getPersistentDataContainer();
+        pdc.set(key, PersistentDataType.STRING, "megaphone");
         megaphone.setItemMeta(megaphoneMeta);
         return megaphone;
     }
 
+    public NamespacedKey getKey() {return key;}
 
 }

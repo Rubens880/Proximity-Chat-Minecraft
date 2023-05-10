@@ -3,24 +3,27 @@ package com.ruben.proximitychat.Listeners;
 import com.ruben.proximitychat.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 public class ChatListener implements Listener {
 
     private Main main;
     private YamlConfiguration config;
 
-    private ItemStack megaPhone;
+    private NamespacedKey key;
 
     public ChatListener(Main main) {
         this.main = main;
         this.config = main.getConfig();
-        this.megaPhone = main.getMegaphoneItemStack();
+        this.key = main.getKey();
     }
 
     @EventHandler
@@ -34,9 +37,11 @@ public class ChatListener implements Listener {
         Location senderLoc = sender.getLocation();
         String messsage = e.getMessage();
         ItemStack itemInHand = sender.getInventory().getItemInMainHand();
+        ItemMeta itemInHandMeta = itemInHand.getItemMeta();
+
 
         //Checks if player has microphone
-        if (itemInHand.equals(megaPhone)) {
+        if (itemInHandMeta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
             CHAT_RANGE = config.getInt("megaphone-range");
         } else {
             CHAT_RANGE = config.getInt("chat-range");
